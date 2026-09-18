@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bharidey Sarayu — Front-End Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #10151C;
+    --ink-raised: #161D26;
+    --text: #E7E4DA;
+    --text-dim: #8D96A3;
+    --line: #2A333F;
+    --signal: #4FD1C0;
+    --signal-dim: #2C6E67;
+    --warn: #E8A855;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ink: #14191F;
+      --ink-raised: #1A212A;
+      --text: #E9E6DC;
+      --text-dim: #929BA8;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #10151C;
+    --ink-raised: #161D26;
+    --text: #E7E4DA;
+    --text-dim: #8D96A3;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- Header / Nav ---------- */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(16, 21, 28, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 0; gap: 20px; flex-wrap: wrap;
+  }
+  .brand { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .brand span { color: var(--signal); }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  nav button {
+    font-family: var(--font-body);
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active {
+    color: var(--signal);
+    background: var(--ink-raised);
+    border-color: var(--line);
+  }
+
+  /* ---------- Panels ---------- */
+  main { padding: 56px 0 80px; min-height: 60vh; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fade .25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .eyebrow { font-family: var(--font-mono); font-size: 0.8rem; color: var(--signal); margin: 0 0 16px; }
+  .eyebrow::before { content: "● "; }
+
+  h1 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(2rem, 4.4vw, 2.9rem);
+    line-height: 1.15; letter-spacing: -0.015em;
+    margin: 0 0 20px; max-width: 16ch;
+  }
+  h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.6rem; margin: 0 0 30px;
+  }
+  .lead { max-width: 62ch; color: var(--text-dim); font-size: 1.06rem; margin: 0 0 30px; }
+
+  .btn {
+    display: inline-block; padding: 11px 20px; border-radius: 3px;
+    text-decoration: none; font-size: 0.92rem; font-weight: 500;
+    border: 1px solid var(--line); cursor: pointer;
+  }
+  .btn-primary { background: var(--signal); color: #0A1210; border-color: var(--signal); }
+  .btn-primary:hover { background: #6BDCCC; }
+  .btn-ghost { color: var(--text); background: none; }
+  .btn-ghost:hover { border-color: var(--text-dim); }
+  .link-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* ---------- Career ---------- */
+  .career p { max-width: 66ch; color: var(--text-dim); font-size: 1.02rem; margin: 0 0 18px; }
+  .career p:last-child { margin-bottom: 0; }
+  .career strong { color: var(--text); font-weight: 500; }
+
+  /* ---------- Experience ---------- */
+  .job-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: 6px 16px; margin-bottom: 6px;
+  }
+  .job-title { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; }
+  .job-time { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); }
+  .job-clients { font-size: 0.9rem; color: var(--signal); margin: 0 0 16px; }
+  .job ul { margin: 0 0 24px; padding-left: 0; list-style: none; }
+  .job li {
+    position: relative; padding-left: 18px; color: var(--text-dim);
+    font-size: 0.96rem; margin-bottom: 10px;
+  }
+  .job li::before {
+    content: ""; position: absolute; left: 0; top: 9px;
+    width: 5px; height: 5px; background: var(--line);
+  }
+  .subproject {
+    margin-top: 8px; padding: 18px 20px;
+    background: var(--ink-raised); border: 1px solid var(--line); border-radius: 5px;
+  }
+  .subproject-title { font-weight: 500; font-size: 0.96rem; margin-bottom: 4px; }
+  .subproject-stack { font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-dim); margin-bottom: 10px; }
+  .subproject ul { margin: 0; }
+
+  .project { padding: 24px 0; border-top: 1px solid var(--line); margin-top: 24px; }
+  .project-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+  .project-title { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .project-stack { font-family: var(--font-mono); font-size: 0.76rem; color: var(--signal); }
+  .project p { color: var(--text-dim); font-size: 0.95rem; max-width: 66ch; margin: 0; }
+
+  /* ---------- Skills ---------- */
+  .skill-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 40px; margin-bottom: 40px; }
+  @media (max-width: 560px) { .skill-groups { grid-template-columns: 1fr; } }
+  .skill-group-title { font-size: 0.78rem; color: var(--text-dim); margin: 0 0 12px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 0.85rem; padding: 6px 12px; border: 1px solid var(--line); border-radius: 3px; color: var(--text); }
+  .chip.learning { border-color: var(--warn); color: var(--warn); }
+
+  .achievements { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 28px; padding-top: 32px; border-top: 1px solid var(--line); }
+  @media (max-width: 560px) { .achievements { grid-template-columns: 1fr; } }
+  .achievement { border-left: 2px solid var(--signal-dim); padding-left: 16px; }
+  .achievement-num { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; color: var(--signal); line-height: 1; margin-bottom: 6px; }
+  .achievement p { margin: 0; color: var(--text-dim); font-size: 0.88rem; }
+
+  /* ---------- Education ---------- */
+  .edu-list { display: flex; flex-direction: column; gap: 20px; }
+  .edu-card {
+    padding: 20px 22px; background: var(--ink-raised); border: 1px solid var(--line);
+    border-radius: 6px; display: flex; justify-content: space-between;
+    align-items: baseline; gap: 16px; flex-wrap: wrap;
+  }
+  .edu-main { max-width: 46ch; }
+  .edu-stage { font-family: var(--font-mono); font-size: 0.76rem; color: var(--signal); margin-bottom: 6px; }
+  .edu-title { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
+  .edu-place { font-size: 0.9rem; color: var(--text-dim); }
+  .edu-score { font-family: var(--font-mono); font-size: 0.95rem; color: var(--text); white-space: nowrap; }
+  .edu-score span { display: block; font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-body); margin-top: 2px; }
+
+  /* ---------- Languages ---------- */
+  .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  .lang-card {
+    padding: 18px 16px; background: var(--ink-raised); border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .lang-name { font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; margin-bottom: 4px; }
+  .lang-level { font-size: 0.8rem; color: var(--text-dim); }
+
+  /* ---------- Contact strip ---------- */
+  .contact-strip {
+    margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .contact-strip p { margin: 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  footer { padding: 24px 0 48px; font-size: 0.8rem; color: var(--text-dim); text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="brand">Bharidey <span>Sarayu</span></div>
+    <nav id="nav">
+      <button data-panel="home" class="active">Home</button>
+      <button data-panel="career">Career</button>
+      <button data-panel="experience">Experience</button>
+      <button data-panel="skills">Skills</button>
+      <button data-panel="education">Education</button>
+      <button data-panel="languages">Languages</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HOME -->
+  <section id="home" class="panel active">
+    <p class="eyebrow">Available for new roles</p>
+    <h1>I build the interface between messy real-world data and the people who have to act on it.</h1>
+    <p class="lead">Front-end developer with 3 years building production web interfaces for healthcare and supply chain platforms — turning multi-endpoint APIs, large datasets, and business workflows into screens people can actually use quickly.</p>
+    <div class="link-row">
+      <a class="btn btn-primary" href="mailto:bharideysarayu1208@gmail.com">Email me</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/sarayu-bharidey/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="tel:+916370234221">+91 63702 34221</a>
+    </div>
+  </section>
+
+  <!-- CAREER -->
+  <section id="career" class="panel">
+    <h2>Career</h2>
+    <div class="career">
+      <p>I've spent the last three years as a front-end developer at <strong>Medicover, via Ashreya Technologies</strong>, building interfaces for hospital and supply chain platforms — including Bharat Hospital, Ashoka Hospital in Nashik, and Milann. Most of that work sits at the point where an API meets a real workflow: purchase orders, goods receipt notes, invoices, lab data, inventory across multiple warehouses.</p>
+      <p>What I've learned doing that is that front-end work is rarely about writing more code — it's about noticing when a form is technically correct but still frustrating, or when a table has all the right data but nobody can read it fast enough. I care about that gap, and about closing it.</p>
+      <p>I'm currently looking for a role that moves me past implementing screens and into shaping how a product actually works — somewhere I can learn from developers and designers who care about both craft and outcome. Alongside that, I'm building on <strong>React.js and Node.js/Express.js</strong> through a self-directed full-stack project.</p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="panel">
+    <h2>Experience</h2>
+    <div class="job">
+      <div class="job-head">
+        <span class="job-title">Front-End Developer — Medicover (via Ashreya Technologies)</span>
+        <span class="job-time">2022 — Present</span>
+      </div>
+      <p class="job-clients">Bharat Hospital · Ashoka Hospital, Nashik · Milann · partner hospital network</p>
+      <ul>
+        <li>Built and maintained front-end modules for supply chain tracking, lab management, and inventory, used across multiple partner-hospital accounts on a shared platform.</li>
+        <li>Implemented dynamic, multi-level dropdown selectors (state → hospital → department) with jQuery/Select2, letting staff filter data across dozens of hospital locations spanning several states.</li>
+        <li>Integrated multiple RESTful API endpoints to surface purchase orders, goods receipt notes, invoices, delivery challans, and sales returns in one unified interface.</li>
+        <li>Built interactive UI elements — status indicators, expandable tables, dynamic filters — to help managers review supply chain and lab data faster.</li>
+        <li>Contributed to front-end performance work (fewer unnecessary re-renders, optimized asset loading) that supported a ~20% improvement in dashboard load times.</li>
+        <li>Worked directly with backend engineers to define API contracts and troubleshoot data mismatches, keeping data flow consistent from server to UI.</li>
+      </ul>
+      <div class="subproject">
+        <div class="subproject-title">Inventory Management System — TechPro</div>
+        <div class="subproject-stack">HTML5 · CSS3 · Bootstrap · JavaScript · jQuery · RESTful APIs</div>
+        <ul>
+          <li>Developed and maintained the inventory UI supporting real-time stock, purchase order, and sales tracking across multiple warehouses.</li>
+          <li>Integrated live APIs for inventory updates, GRN workflows, and sales tracking, reducing reconciliation errors.</li>
+          <li>Built dynamic, paginated data tables handling large datasets with minimal latency, plus form validation that cut invalid submissions.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-title">School Management System — personal project</span>
+        <span class="project-stack">React.js · Node.js · Express.js</span>
+      </div>
+      <p>A full-stack app built independently to move beyond jQuery into React — a React front end talking to a self-built Node/Express REST API. Implements core CRUD workflows for students, classes, and attendance, and was my hands-on route into component structure, props/state, and connecting a front end to a backend I designed myself.</p>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="panel">
+    <h2>Skills</h2>
+    <div class="skill-groups">
+      <div>
+        <p class="skill-group-title">Languages & libraries</p>
+        <div class="chip-row">
+          <span class="chip">HTML5</span>
+          <span class="chip">CSS3</span>
+          <span class="chip">JavaScript (ES6+)</span>
+          <span class="chip">jQuery</span>
+          <span class="chip">Bootstrap</span>
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-title">Currently learning</p>
+        <div class="chip-row">
+          <span class="chip learning">React.js</span>
+          <span class="chip learning">Node.js</span>
+          <span class="chip learning">Express.js</span>
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-title">Tools</p>
+        <div class="chip-row">
+          <span class="chip">Git & GitHub</span>
+          <span class="chip">VS Code</span>
+          <span class="chip">Chrome DevTools</span>
+          <span class="chip">REST APIs</span>
+          <span class="chip">JSON</span>
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-title">Core competencies</p>
+        <div class="chip-row">
+          <span class="chip">Responsive design</span>
+          <span class="chip">Cross-browser compatibility</span>
+          <span class="chip">DOM manipulation</span>
+          <span class="chip">Form validation</span>
+          <span class="chip">Debugging</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="achievements">
+      <div class="achievement">
+        <div class="achievement-num">~20%</div>
+        <p>Reduction in page load times across enterprise dashboards through front-end performance work.</p>
+      </div>
+      <div class="achievement">
+        <div class="achievement-num">0</div>
+        <p>Critical post-launch defects on production UI features shipped for healthcare and supply chain clients.</p>
+      </div>
+      <div class="achievement">
+        <div class="achievement-num">Multi</div>
+        <p>Endpoint API integrations that helped eliminate manual reporting bottlenecks for operations teams.</p>
+      </div>
+      <div class="achievement">
+        <div class="achievement-num">Every</div>
+        <p>Sprint deadline met in an agile/Scrum environment, without trading off code quality.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="panel">
+    <h2>Education</h2>
+    <div class="edu-list">
+      <div class="edu-card">
+        <div class="edu-main">
+          <div class="edu-stage">Schooling · CBSE</div>
+          <div class="edu-title">Centurion Public School</div>
+          <div class="edu-place">Parlakhemundi, Odisha</div>
+        </div>
+        <div class="edu-score">74%<span>Overall</span></div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-main">
+          <div class="edu-stage">Intermediate · MPC</div>
+          <div class="edu-title">Gayatri Junior College</div>
+          <div class="edu-place">Srikakulam, Andhra Pradesh · Mathematics, Physics, Chemistry</div>
+        </div>
+        <div class="edu-score">92%<span>Overall</span></div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-main">
+          <div class="edu-stage">Degree · BCA</div>
+          <div class="edu-title">Bachelor of Computer Applications</div>
+          <div class="edu-place">Srikakulam, Andhra Pradesh · Affiliated to Dr. B.R. Ambedkar University</div>
+        </div>
+        <div class="edu-score">8.6<span>CGPA</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LANGUAGES -->
+  <section id="languages" class="panel">
+    <h2>Languages I know</h2>
+    <div class="lang-grid">
+      <div class="lang-card"><div class="lang-name">Marathi</div><div class="lang-level">Native</div></div>
+      <div class="lang-card"><div class="lang-name">English</div><div class="lang-level">Professional</div></div>
+      <div class="lang-card"><div class="lang-name">Telugu</div><div class="lang-level">Fluent</div></div>
+      <div class="lang-card"><div class="lang-name">Hindi</div><div class="lang-level">Fluent</div></div>
+      <div class="lang-card"><div class="lang-name">Odia</div><div class="lang-level">Fluent</div></div>
+    </div>
+  </section>
+
+  <div class="contact-strip">
+    <p>Based in Parlakhemundi, Odisha — open to relocating or remote roles arayuadd.</p>
+    <div class="link-row">
+      <a class="btn btn-ghost" href="mailto:bharideysarayu1208@gmail.com">bharideysarayu1208@gmail.com</a>
+    </div>
+  </div>
+</main>
+
+<footer>Bharidey Sarayu — Front-End Developer</footer>
+
+<script>
+(function() {
+  var buttons = document.querySelectorAll('#nav button');
+  var panels = document.querySelectorAll('.panel');
+  buttons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = btn.getAttribute('data-panel');
+      buttons.forEach(function(b) { b.classList.remove('active'); });
+      panels.forEach(function(p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
