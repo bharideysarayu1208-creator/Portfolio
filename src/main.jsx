@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -55,17 +55,29 @@ function Header({ activePanel, onNavigate }) {
   return (
     <header>
       <div className="wrap header-inner">
-        <div className="brand">Bharidey <span>Sarayu</span></div>
+        <a
+          href="#home"
+          className="brand"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigate('home');
+          }}
+        >
+          Bharidey <span>Sarayu</span>
+        </a>
         <nav aria-label="Main navigation">
           {navItems.map(([id, label]) => (
-            <button
+            <a
               key={id}
+              href={`#${id}`}
               className={activePanel === id ? 'active' : ''}
-              onClick={() => onNavigate(id)}
-              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate(id);
+              }}
             >
               {label}
-            </button>
+            </a>
           ))}
         </nav>
       </div>
@@ -189,20 +201,42 @@ function Languages() {
   );
 }
 
+const validPanels = ['home', 'career', 'experience', 'skills', 'education', 'languages'];
+
+function getPanelFromHash() {
+  const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+  return validPanels.includes(hash) ? hash : 'home';
+}
+
 function App() {
-  const [activePanel, setActivePanel] = useState('home');
+  const [activePanel, setActivePanel] = useState(getPanelFromHash);
   const panels = { home: Home, career: Career, experience: Experience, skills: Skills, education: Education, languages: Languages };
-  const ActivePanel = panels[activePanel];
+  const ActivePanel = panels[activePanel] || Home;
+
+  useEffect(() => {
+    function handleHashChange() {
+      const panel = getPanelFromHash();
+      setActivePanel(panel);
+    }
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   function navigate(panel) {
     setActivePanel(panel);
+    if (window.location.hash !== `#${panel}`) {
+      window.location.hash = panel;
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   return (
     <>
       <Header activePanel={activePanel} onNavigate={navigate} />
-      <main className="wrap"><section className="panel active" key={activePanel}><ActivePanel /></section>
+      <main className="wrap">
+        <section id={activePanel} className="panel active" key={activePanel}>
+          <ActivePanel />
+        </section>
         <div className="contact-strip">
           <p>Based in Parlakhemundi, Odisha - open to relocating or remote roles.</p>
           <div className="link-row"><a className="btn btn-ghost" href="mailto:bharideysarayu1208@gmail.com">bharideysarayu1208@gmail.com</a></div>
