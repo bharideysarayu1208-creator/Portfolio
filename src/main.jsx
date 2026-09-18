@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -23,100 +23,35 @@ const experiencePoints = [
 const educationData = [
   {
     stage: 'Degree · BCA',
-    degree: 'Bachelor of Computer Applications',
-    institute: 'Affiliated to Dr. B.R. Ambedkar University, Srikakulam, Andhra Pradesh',
-    targetScore: 8.6,
-    scorePrefix: '',
-    scoreSuffix: '',
-    isFloat: true,
-    scoreLabel: 'CGPA',
+    title: 'Bachelor of Computer Applications',
+    place: 'Affiliated to Dr. B.R. Ambedkar University, Srikakulam, Andhra Pradesh',
+    score: '8.6',
+    label: 'CGPA',
   },
   {
     stage: 'Intermediate · MPC',
-    degree: 'Mathematics, Physics, Chemistry',
-    institute: 'Gayatri Junior College, Srikakulam, Andhra Pradesh',
-    targetScore: 92,
-    scorePrefix: '',
-    scoreSuffix: '%',
-    isFloat: false,
-    scoreLabel: 'Overall',
+    title: 'Gayatri Junior College',
+    place: 'Srikakulam, Andhra Pradesh — Mathematics, Physics, Chemistry',
+    score: '92%',
+    label: 'Overall',
   },
   {
     stage: 'Schooling · CBSE',
-    degree: 'Secondary School Examination',
-    institute: 'Centurion Public School, Parlakhemundi, Odisha',
-    targetScore: 74,
-    scorePrefix: '',
-    scoreSuffix: '%',
-    isFloat: false,
-    scoreLabel: 'Overall',
+    title: 'Centurion Public School',
+    place: 'Parlakhemundi, Odisha',
+    score: '74%',
+    label: 'Overall',
   },
 ];
 
-const languagesData = [
-  { name: 'Marathi', level: 'Native' },
-  { name: 'English', level: 'Professional' },
-  { name: 'Telugu', level: 'Fluent' },
-  { name: 'Hindi', level: 'Fluent' },
-  { name: 'Odia', level: 'Fluent' },
+const languageData = [
+  { name: 'Marathi', level: 'Native', icon: 'MR' },
+  { name: 'English', level: 'Professional', icon: 'EN' },
+  { name: 'Telugu', level: 'Fluent', icon: 'TE' },
+  { name: 'Hindi', level: 'Fluent', icon: 'HI' },
+  { name: 'Odia', level: 'Fluent', icon: 'OD' },
 ];
 
-/* ==========================================================================
-   Smooth Stat Counter Component
-   ========================================================================== */
-function CountUp({ target, prefix = '', suffix = '', isFloat = false, duration = 1600 }) {
-  const [count, setCount] = useState(0);
-  const nodeRef = useRef(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const el = nodeRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const startTime = performance.now();
-
-          const step = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            // Ease out cubic
-            const eased = 1 - Math.pow(1 - progress, 3);
-            const currentVal = target * eased;
-
-            setCount(currentVal);
-
-            if (progress < 1) {
-              requestAnimationFrame(step);
-            } else {
-              setCount(target);
-            }
-          };
-
-          requestAnimationFrame(step);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [target, duration]);
-
-  return (
-    <span ref={nodeRef}>
-      {prefix}
-      {isFloat ? count.toFixed(1) : Math.round(count)}
-      {suffix}
-    </span>
-  );
-}
-
-/* ==========================================================================
-   Header Component
-   ========================================================================== */
 function Header({ activeSection, onNavigate }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -136,8 +71,11 @@ function Header({ activeSection, onNavigate }) {
             handleNav('home');
           }}
         >
-          <span className="brand-name">Bharidey Sarayu</span>
-          <span className="brand-meta">/ Front-End Developer</span>
+          <div className="brand-badge">BS</div>
+          <div className="brand-title">
+            <span className="brand-name">Bharidey Sarayu</span>
+            <span className="brand-sub">Front-End Developer</span>
+          </div>
         </a>
 
         <nav className="desktop-nav" aria-label="Main navigation">
@@ -156,16 +94,17 @@ function Header({ activeSection, onNavigate }) {
           ))}
         </nav>
 
-        <div className="nav-status">
-          <span className="status-beacon" aria-hidden="true"></span>
-          <span>Available for Roles</span>
+        <div className="header-actions">
+          <a className="btn-header-cta" href="mailto:bharideysarayu1208@gmail.com">
+            Get in Touch →
+          </a>
         </div>
 
         <button
           className={`mobile-toggle ${mobileOpen ? 'open' : ''}`}
           onClick={() => setMobileOpen(!mobileOpen)}
           type="button"
-          aria-label="Toggle navigation menu"
+          aria-label="Toggle menu"
           aria-expanded={mobileOpen}
         >
           <span></span>
@@ -193,64 +132,118 @@ function Header({ activeSection, onNavigate }) {
   );
 }
 
-/* ==========================================================================
-   Hero Section (#home)
-   ========================================================================== */
 function Hero({ onNavigate }) {
   return (
     <section id="home">
-      <div className="wrap" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="hero-meta reveal">
-          <span>Parlakhemundi, Odisha, India</span>
-          <span>·</span>
-          <span>Open to Relocating & Remote</span>
+      <div className="wrap">
+        <div className="hero-grid">
+          <div className="hero-left">
+            <div className="hero-status-pill reveal">
+              <span className="beacon" aria-hidden="true"></span>
+              <span>Available for new roles · Front-End Developer</span>
+            </div>
+
+            <h1 className="hero-heading reveal delay-1">
+              I build the interface between <span className="gradient-text">messy real-world data</span> and the people who have to act on it.
+            </h1>
+
+            <p className="hero-lead reveal delay-2">
+              Front-end developer with 3 years building production web interfaces for healthcare and supply chain platforms — turning multi-endpoint APIs, large datasets, and business workflows into screens people can actually use quickly.
+            </p>
+
+            <div className="hero-actions reveal delay-3">
+              <a className="btn btn-primary" href="mailto:bharideysarayu1208@gmail.com">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                Email me
+              </a>
+              <a className="btn btn-ghost" href="https://www.linkedin.com/in/sarayu-bharidey/" target="_blank" rel="noreferrer">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.63 1.63 0 1 0 0 3.26 1.63 1.63 0 0 0 0-3.26Z"/></svg>
+                LinkedIn
+              </a>
+              <a className="btn btn-ghost" href="tel:+916370234221">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                +91 63702 34221
+              </a>
+            </div>
+
+            <div className="hero-meta-strip reveal delay-4">
+              <div className="hero-meta-item">
+                <span>📍</span>
+                <span>Parlakhemundi, Odisha, India</span>
+              </div>
+              <div className="hero-meta-item">
+                <span>⚡</span>
+                <span>Open to Relocating & Remote</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="hero-right reveal delay-2">
+            <div className="dev-card">
+              <div className="dev-card-bar">
+                <div className="card-dots">
+                  <div className="card-dot dot-red"></div>
+                  <div className="card-dot dot-yellow"></div>
+                  <div className="card-dot dot-green"></div>
+                </div>
+                <div className="card-filename">developer-profile.config.ts</div>
+                <div style={{ width: '36px' }}></div>
+              </div>
+
+              <div className="dev-card-body">
+                <div className="code-row">
+                  <span className="code-key">developer:</span>
+                  <span className="code-val">"Bharidey Sarayu"</span>
+                </div>
+                <div className="code-row">
+                  <span className="code-key">currentRole:</span>
+                  <span className="code-val accent">"Front-End Developer"</span>
+                </div>
+                <div className="code-row">
+                  <span className="code-key">experienceAt:</span>
+                  <span className="code-val">"Medicover (via Ashreya)"</span>
+                </div>
+                <div className="code-row">
+                  <span className="code-key">performanceGain:</span>
+                  <span className="code-val accent">"~20% dashboard speedup"</span>
+                </div>
+                <div className="code-row">
+                  <span className="code-key">postLaunchDefects:</span>
+                  <span className="code-val success">"0 critical issues"</span>
+                </div>
+                <div className="code-row">
+                  <span className="code-key">coreStack:</span>
+                  <div className="code-tags">
+                    {['React.js', 'Node.js', 'JavaScript', 'HTML5', 'CSS3', 'REST APIs', 'jQuery'].map((t) => (
+                      <span className="code-tag-pill" key={t}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="code-row">
+                  <span className="code-key">status:</span>
+                  <span className="code-val success">"Available for interview"</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <h1 className="hero-title reveal delay-1">
-          I build the interface between <em>messy real-world data</em> and the people who have to act on it.
-        </h1>
-
-        <p className="hero-lead reveal delay-2">
-          Front-end developer with 3 years building production web interfaces for healthcare and supply chain platforms — turning multi-endpoint APIs, large datasets, and business workflows into screens people can actually use quickly.
-        </p>
-
-        <div className="hero-actions reveal delay-3">
-          <a className="btn btn-primary" href="mailto:bharideysarayu1208@gmail.com">
-            Get in Touch
-          </a>
-          <a className="btn btn-secondary" href="https://www.linkedin.com/in/sarayu-bharidey/" target="_blank" rel="noreferrer">
-            LinkedIn Profile ↗
-          </a>
-          <a className="btn btn-link" href="tel:+916370234221">
-            +91 63702 34221
-          </a>
-          <button
-            className="btn btn-link"
-            onClick={() => onNavigate('experience')}
-            type="button"
-          >
-            View Work History ↓
-          </button>
-        </div>
-
-        <div className="hero-numbers-strip reveal delay-4">
-          <div className="num-block">
-            <div className="num-value">
-              <CountUp target={3} suffix=" Years" />
-            </div>
-            <div className="num-label">Building production interfaces for healthcare & supply chain platforms.</div>
+        <div className="metrics-strip reveal delay-4">
+          <div className="metric-box">
+            <div className="metric-number">3 Years</div>
+            <div className="metric-label">Building production web interfaces for healthcare & supply chain platforms</div>
           </div>
-          <div className="num-block">
-            <div className="num-value">
-              <CountUp target={20} prefix="~" suffix="%" />
-            </div>
-            <div className="num-label">Improvement in dashboard load times through front-end performance work.</div>
+          <div className="metric-box">
+            <div className="metric-number">~20%</div>
+            <div className="metric-label">Dashboard load time improvement through front-end performance tuning</div>
           </div>
-          <div className="num-block">
-            <div className="num-value">
-              <em>Multi</em>-Hospital
-            </div>
-            <div className="num-label">Dynamic hierarchical filtering spanning partner-hospital locations.</div>
+          <div className="metric-box">
+            <div className="metric-number">Multi-Hospital</div>
+            <div className="metric-label">Dynamic hierarchical filtering across partner-hospital accounts</div>
+          </div>
+          <div className="metric-box">
+            <div className="metric-number">0 Defects</div>
+            <div className="metric-label">Critical post-launch regressions shipped on live medical systems</div>
           </div>
         </div>
       </div>
@@ -258,119 +251,106 @@ function Hero({ onNavigate }) {
   );
 }
 
-/* ==========================================================================
-   Career Section (#career)
-   ========================================================================== */
 function Career() {
   return (
     <section id="career">
       <div className="wrap">
-        <div className="section-label reveal">01 / Career Summary</div>
-        <h2 className="section-heading reveal delay-1">
-          From multi-hospital data workflows to <em>end-to-end product craft</em>.
-        </h2>
-        <p className="section-intro reveal delay-2">
-          Three years of shipping interfaces where usability directly dictates operational throughput.
+        <div className="section-badge reveal">01 / Career Summary</div>
+        <h2 className="section-title reveal delay-1">Bridging Data Complexity and Human Usability</h2>
+        <p className="section-desc reveal delay-2">
+          Turning large healthcare datasets and multi-endpoint APIs into intuitive, high-speed interfaces.
         </p>
 
-        <div className="career-layout">
-          <div className="career-body reveal delay-1">
+        <div className="career-grid">
+          <div className="career-content reveal delay-1">
             <p>
               I've spent the last three years as a front-end developer at <strong>Medicover, via Ashreya Technologies</strong>, building interfaces for hospital and supply chain platforms — including <strong>Bharat Hospital</strong>, <strong>Ashoka Hospital (Nashik)</strong>, and <strong>Milann</strong>.
             </p>
             <p>
-              Most of that work sits directly where multi-endpoint APIs meet real operational workflows: purchase orders, goods receipt notes (GRNs), invoices, lab data, and inventory across multiple warehouses.
+              Most of that work sits directly at the point where an API meets a real workflow: purchase orders, goods receipt notes (GRNs), invoices, lab data, and inventory across multiple warehouses.
             </p>
             <p>
               I'm now looking for a role that moves me past implementing screens and into shaping how a product actually works, while building on <strong>React.js and Node.js/Express.js</strong> through a self-directed full-stack project.
             </p>
           </div>
 
-          <aside className="career-philosophy reveal delay-2">
-            <div className="philosophy-tag">Guiding Principle</div>
-            <blockquote className="philosophy-quote">
-              “Front-end work is rarely about writing more code — it's about noticing when a form is technically correct but still frustrating, or when a table has all the right data but nobody can read it fast enough.”
-            </blockquote>
-            <div className="philosophy-author">Bharidey Sarayu — Front-End Developer</div>
-          </aside>
+          <div className="philosophy-card reveal delay-2">
+            <div className="quote-symbol">“</div>
+            <p className="quote-body">
+              What I've learned doing that is that front-end work is rarely about writing more code — it's about noticing when a form is technically correct but still frustrating, or when a table has all the right data but nobody can read it fast enough. I care about that gap, and about closing it.
+            </p>
+            <div className="quote-author">Bharidey Sarayu · Engineering Philosophy</div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ==========================================================================
-   Experience Section (#experience)
-   ========================================================================== */
 function Experience() {
   return (
     <section id="experience">
       <div className="wrap">
-        <div className="section-label reveal">02 / Experience</div>
-        <h2 className="section-heading reveal delay-1">
-          Production systems shipped for <em>healthcare & supply chain</em>.
-        </h2>
-        <p className="section-intro reveal delay-2">
-          Proven track record collaborating with backend engineers, untangling large datasets, and optimizing web performance.
+        <div className="section-badge reveal">02 / Experience</div>
+        <h2 className="section-title reveal delay-1">Hands-On Production Experience</h2>
+        <p className="section-desc reveal delay-2">
+          Production modules, hospital data systems, and self-directed full-stack software.
         </p>
 
-        <div className="experience-stack">
-          {/* Main Role Card */}
-          <article className="exp-card reveal">
-            <div className="exp-card-header">
+        <div className="timeline">
+          {/* Main Medicover Role */}
+          <article className="job-card reveal">
+            <div className="job-head">
               <div>
-                <h3 className="exp-role-title">
-                  Front-End Developer <span>— Medicover (via Ashreya Technologies)</span>
+                <h3 className="job-title">
+                  Front-End Developer — <span className="job-company">Medicover</span> (via Ashreya Technologies)
                 </h3>
               </div>
-              <div className="exp-period">2022 — Present</div>
+              <span className="job-date">2022 – Present</span>
             </div>
 
-            <div className="exp-client-row">
+            <div className="client-pills">
               <span className="client-pill">Bharat Hospital</span>
               <span className="client-pill">Ashoka Hospital (Nashik)</span>
               <span className="client-pill">Milann</span>
               <span className="client-pill">Partner Hospital Network</span>
             </div>
 
-            <ul className="exp-bullets">
+            <ul className="job-points">
               {experiencePoints.map((point) => (
                 <li key={point}>{point}</li>
               ))}
             </ul>
 
-            <div className="subproject-divider"></div>
-
             {/* Sub-project inside Medicover */}
-            <div>
-              <div className="subproject-header">
-                <h4 className="subproject-heading">Sub-project: Inventory Management System — TechPro</h4>
+            <div className="subproject-card">
+              <div className="subproject-head">
+                <h4 className="subproject-title">Sub-project: Inventory Management System — TechPro</h4>
+                <span className="subproject-tag">Enterprise Module</span>
               </div>
-              <div className="subproject-stack-text">
+              <div className="subproject-stack">
                 HTML5 · CSS3 · Bootstrap · JavaScript · jQuery · RESTful APIs
               </div>
-              <ul className="exp-bullets">
+              <ul className="job-points" style={{ marginBottom: 0 }}>
                 <li>Developed the inventory UI for real-time stock, purchase orders, and sales tracking across multiple warehouses.</li>
                 <li>Built dynamic, paginated data tables and form validation that reduced reconciliation errors and invalid submissions.</li>
               </ul>
             </div>
           </article>
 
-          {/* Personal Project Card */}
-          <article className="personal-project-box reveal delay-1">
-            <div className="exp-card-header">
+          {/* Personal Project */}
+          <article className="personal-card reveal delay-1">
+            <div className="job-head">
               <div>
-                <h3 className="exp-role-title">
-                  School Management System <span>— Personal Project</span>
-                </h3>
+                <h3 className="job-title">Personal project: School Management System</h3>
               </div>
-              <div className="exp-period">Full-Stack Exploration</div>
+              <span className="job-date">Independent Full-Stack</span>
             </div>
-            <div className="subproject-stack-text">
+            <div className="subproject-stack">
               React.js · Node.js · Express.js · REST APIs
             </div>
-            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: '1.75' }}>
-              Full-stack app built independently: React front end + self-built Node/Express REST API. Implements core CRUD workflows for students, classes, and attendance — hands-on execution of component architecture, state management, and API contract design.
+            <p>
+              Full-stack app built independently: React front end + self-built Node/Express REST API. Implements core CRUD workflows for students, classes, and attendance, establishing hands-on execution of component architecture, state management, and backend contract design.
             </p>
           </article>
         </div>
@@ -379,55 +359,59 @@ function Experience() {
   );
 }
 
-/* ==========================================================================
-   Skills Section (#skills)
-   ========================================================================== */
 function Skills() {
   return (
     <section id="skills">
       <div className="wrap">
-        <div className="section-label reveal">03 / Capabilities</div>
-        <h2 className="section-heading reveal delay-1">
-          Technical toolset & <em>core competencies</em>.
-        </h2>
-        <p className="section-intro reveal delay-2">
-          Grounded in resilient core web standards, enterprise DOM scripting, and modern JavaScript architectures.
+        <div className="section-badge reveal">03 / Capabilities</div>
+        <h2 className="section-title reveal delay-1">Technical Skills & Expertise</h2>
+        <p className="section-desc reveal delay-2">
+          Structured toolset spanning core web standards, enterprise DOM scripting, and modern React architectures.
         </p>
 
         <div className="skills-grid">
-          <div className="skill-box reveal">
-            <div className="skill-box-title">Languages & Libraries</div>
-            <div className="skill-tags">
+          <div className="skill-card reveal">
+            <div className="skill-card-head">
+              <span className="skill-group-name">Languages & Libraries</span>
+              <span className="skill-badge-sub">Core</span>
+            </div>
+            <div className="skill-chips">
               {['HTML5', 'CSS3', 'JavaScript (ES6+)', 'jQuery', 'Bootstrap'].map((skill) => (
-                <span className="skill-tag" key={skill}>{skill}</span>
+                <span className="skill-chip" key={skill}>{skill}</span>
               ))}
             </div>
           </div>
 
-          <div className="skill-box reveal delay-1">
-            <div className="skill-box-title learning">
-              <span>Currently Learning</span>
-              <span>●</span>
+          <div className="skill-card highlight reveal delay-1">
+            <div className="skill-card-head">
+              <span className="skill-group-name">Currently Learning</span>
+              <span className="skill-badge-sub" style={{ background: '#4F46E5', color: '#FFFFFF' }}>Active Focus</span>
             </div>
-            <div className="skill-tags">
+            <div className="skill-chips">
               {['React.js', 'Node.js', 'Express.js'].map((skill) => (
-                <span className="skill-tag" key={skill} style={{ borderColor: 'var(--accent-hairline)', color: 'var(--accent)' }}>{skill}</span>
+                <span className="skill-chip" key={skill}>{skill}</span>
               ))}
             </div>
           </div>
 
-          <div className="skill-box reveal delay-2">
-            <div className="skill-box-title">Tools & Ecosystem</div>
-            <div className="skill-tags">
+          <div className="skill-card reveal delay-2">
+            <div className="skill-card-head">
+              <span className="skill-group-name">Tools & Ecosystem</span>
+              <span className="skill-badge-sub">Tooling</span>
+            </div>
+            <div className="skill-chips">
               {['Git & GitHub', 'VS Code', 'Chrome DevTools', 'REST APIs', 'JSON'].map((skill) => (
-                <span className="skill-tag" key={skill}>{skill}</span>
+                <span className="skill-chip" key={skill}>{skill}</span>
               ))}
             </div>
           </div>
 
-          <div className="skill-box reveal delay-3">
-            <div className="skill-box-title">Core Competencies</div>
-            <div className="skill-tags">
+          <div className="skill-card reveal delay-3">
+            <div className="skill-card-head">
+              <span className="skill-group-name">Core Competencies</span>
+              <span className="skill-badge-sub">Practice</span>
+            </div>
+            <div className="skill-chips">
               {[
                 'Responsive design',
                 'Cross-browser compatibility',
@@ -435,7 +419,7 @@ function Skills() {
                 'Form validation',
                 'Debugging',
               ].map((skill) => (
-                <span className="skill-tag" key={skill}>{skill}</span>
+                <span className="skill-chip" key={skill}>{skill}</span>
               ))}
             </div>
           </div>
@@ -445,39 +429,27 @@ function Skills() {
   );
 }
 
-/* ==========================================================================
-   Education Section (#education)
-   ========================================================================== */
 function Education() {
   return (
     <section id="education">
       <div className="wrap">
-        <div className="section-label reveal">04 / Education</div>
-        <h2 className="section-heading reveal delay-1">
-          Academic foundation & <em>formal qualifications</em>.
-        </h2>
-        <p className="section-intro reveal delay-2">
-          Bachelor's in computer applications paired with strong quantitative foundations.
+        <div className="section-badge reveal">04 / Education</div>
+        <h2 className="section-title reveal delay-1">Academic Background</h2>
+        <p className="section-desc reveal delay-2">
+          Formal academic training in computer applications and science.
         </p>
 
-        <div className="education-list">
+        <div className="edu-grid">
           {educationData.map((item, idx) => (
-            <article className={`edu-row reveal delay-${idx + 1}`} key={item.institute}>
+            <article className={`edu-card reveal delay-${idx + 1}`} key={item.title}>
               <div>
-                <div className="edu-stage-tag">{item.stage}</div>
-                <h3 className="edu-degree">{item.degree}</h3>
-                <p className="edu-institute">{item.institute}</p>
+                <div className="edu-stage">{item.stage}</div>
+                <h3 className="edu-title">{item.title}</h3>
+                <p className="edu-place">{item.place}</p>
               </div>
-              <div className="edu-score-callout">
-                <div className="edu-score-num">
-                  <CountUp
-                    target={item.targetScore}
-                    prefix={item.scorePrefix}
-                    suffix={item.scoreSuffix}
-                    isFloat={item.isFloat}
-                  />
-                </div>
-                <div className="edu-score-caption">{item.scoreLabel}</div>
+              <div className="edu-score-pill">
+                <span className="score-value">{item.score}</span>
+                <span className="score-type">{item.label}</span>
               </div>
             </article>
           ))}
@@ -487,60 +459,43 @@ function Education() {
   );
 }
 
-/* ==========================================================================
-   Languages Section (#languages)
-   ========================================================================== */
 function Languages() {
   return (
     <section id="languages">
       <div className="wrap">
-        <div className="section-label reveal">05 / Communication</div>
-        <h2 className="section-heading reveal delay-1">
-          Languages for <em>cross-functional teams</em>.
-        </h2>
-        <p className="section-intro reveal delay-2">
-          Fluent across 5 regional and professional languages for high-empathy communication.
+        <div className="section-badge reveal">05 / Communication</div>
+        <h2 className="section-title reveal delay-1">Languages I Know</h2>
+        <p className="section-desc reveal delay-2">
+          Effective multilingual communication across regional and cross-functional teams.
         </p>
 
         <div className="languages-grid">
-          {languagesData.map((lang, idx) => (
-            <div className={`lang-cell reveal delay-${(idx % 3) + 1}`} key={lang.name}>
-              <div className="lang-cell-name">{lang.name}</div>
-              <div className="lang-cell-level">{lang.level}</div>
+          {languageData.map((lang, idx) => (
+            <div className={`lang-card reveal delay-${(idx % 4) + 1}`} key={lang.name}>
+              <div className="lang-circle">{lang.icon}</div>
+              <div className="lang-name">{lang.name}</div>
+              <div className="lang-level">{lang.level}</div>
             </div>
           ))}
         </div>
 
-        {/* Studio Editorial Closing */}
-        <div className="studio-closing reveal">
+        {/* High-Impact Contact Card */}
+        <div className="contact-card reveal">
           <div>
-            <h3 className="closing-title">
-              Let's build interfaces that <em>actually serve people</em>.
-            </h3>
-            <p className="closing-subtext">
+            <h3>Let's build something exceptional together</h3>
+            <p>
               Currently available for new front-end developer roles. Based in Parlakhemundi, Odisha, India — open to relocating or remote roles globally.
             </p>
           </div>
-
-          <div className="closing-contact-stack">
-            <div className="contact-line">
-              <span className="contact-label">Email</span>
-              <a className="contact-value" href="mailto:bharideysarayu1208@gmail.com">
-                bharideysarayu1208@gmail.com
-              </a>
-            </div>
-            <div className="contact-line">
-              <span className="contact-label">Phone</span>
-              <a className="contact-value" href="tel:+916370234221">
-                +91 63702 34221
-              </a>
-            </div>
-            <div className="contact-line">
-              <span className="contact-label">LinkedIn</span>
-              <a className="contact-value" href="https://www.linkedin.com/in/sarayu-bharidey/" target="_blank" rel="noreferrer">
-                in/sarayu-bharidey ↗
-              </a>
-            </div>
+          <div className="contact-card-actions">
+            <a className="btn btn-white" href="mailto:bharideysarayu1208@gmail.com">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              bharideysarayu1208@gmail.com
+            </a>
+            <a className="btn btn-outline-white" href="tel:+916370234221">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              +91 63702 34221
+            </a>
           </div>
         </div>
       </div>
@@ -548,9 +503,6 @@ function Languages() {
   );
 }
 
-/* ==========================================================================
-   Root Application
-   ========================================================================== */
 function App() {
   const [activeSection, setActiveSection] = useState('home');
 
@@ -638,16 +590,6 @@ function App() {
 
   return (
     <>
-      {/* Background Subtle Marquee */}
-      <div className="studio-ticker" aria-hidden="true">
-        <div className="studio-ticker-track">
-          HTML5 · CSS3 · JavaScript ES6+ · React.js · Node.js · Express.js · RESTful APIs · jQuery · Responsive Design · DOM Manipulation · Performance Optimization ·&nbsp;
-        </div>
-        <div className="studio-ticker-track">
-          HTML5 · CSS3 · JavaScript ES6+ · React.js · Node.js · Express.js · RESTful APIs · jQuery · Responsive Design · DOM Manipulation · Performance Optimization ·&nbsp;
-        </div>
-      </div>
-
       <Header activeSection={activeSection} onNavigate={scrollToSection} />
       <main>
         <Hero onNavigate={scrollToSection} />
@@ -658,12 +600,13 @@ function App() {
         <Languages />
       </main>
       <footer>
-        <div className="wrap footer-row">
-          <div className="footer-copy">
-            Bharidey Sarayu — Front-End Developer · Parlakhemundi, Odisha, India
+        <div className="wrap footer-inner">
+          <div className="footer-brand">
+            Bharidey Sarayu · Front-End Developer
           </div>
+          <div>Parlakhemundi, Odisha, India · +91 63702 34221</div>
           <button
-            className="footer-top-btn"
+            className="back-to-top"
             onClick={() => scrollToSection('home')}
             type="button"
           >
