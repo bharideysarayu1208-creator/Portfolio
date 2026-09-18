@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bharidey Sarayu — Front-End Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #10151C;
+    --ink-raised: #161D26;
+    --paper: #EDEAE1;
+    --text: #E7E4DA;
+    --text-dim: #8D96A3;
+    --line: #2A333F;
+    --signal: #4FD1C0;
+    --signal-dim: #2C6E67;
+    --warn: #E8A855;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ink: #14191F;
+      --ink-raised: #1A212A;
+      --text: #E9E6DC;
+      --text-dim: #929BA8;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ink: #10151C;
+    --ink-raised: #161D26;
+    --text: #E7E4DA;
+    --text-dim: #8D96A3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible, select:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(16, 21, 28, 0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  .brand span { color: var(--signal); }
+  nav {
+    display: flex;
+    gap: 24px;
+    font-size: 0.92rem;
+    color: var(--text-dim);
+  }
+  nav a { text-decoration: none; }
+  nav a:hover { color: var(--text); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--signal);
+    margin: 0 0 18px;
+  }
+  .hero-tag::before {
+    content: "● ";
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.1rem, 4.4vw, 3.1rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    margin: 0 0 22px;
+    max-width: 15ch;
+  }
+  .hero-desc {
+    max-width: 62ch;
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    margin: 0 0 32px;
+  }
+  .hero-links {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 11px 20px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    border: 1px solid var(--line);
+  }
+  .btn-primary {
+    background: var(--signal);
+    color: #0A1210;
+    border-color: var(--signal);
+  }
+  .btn-primary:hover { background: #6BDCCC; }
+  .btn-ghost { color: var(--text); }
+  .btn-ghost:hover { border-color: var(--text-dim); }
+
+  /* ---------- Live demo panel ---------- */
+  .demo {
+    margin-top: 48px;
+    background: var(--ink-raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .demo-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .demo-bar .dots { display: flex; gap: 6px; }
+  .demo-bar .dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--line);
+  }
+  .demo-body { padding: 24px 22px 26px; }
+  .demo-label {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin: 0 0 14px;
+  }
+  .demo-label strong { color: var(--text); font-weight: 500; }
+  .selectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 620px) {
+    .selectors { grid-template-columns: 1fr; }
+  }
+  .selectors label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .selectors select {
+    width: 100%;
+    padding: 9px 10px;
+    background: var(--ink);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+  }
+  .selectors select:disabled { color: var(--text-dim); cursor: not-allowed; }
+
+  .result-row {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .result-count {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--signal);
+  }
+  .result-note {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  /* ---------- Section shell ---------- */
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 34px;
+  }
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--signal-dim);
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- About ---------- */
+  .about p {
+    max-width: 68ch;
+    color: var(--text-dim);
+    font-size: 1.02rem;
+    margin: 0 0 16px;
+  }
+  .about strong { color: var(--text); font-weight: 500; }
+
+  /* ---------- Experience ---------- */
+  .job { margin-bottom: 40px; }
+  .job:last-child { margin-bottom: 0; }
+  .job-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-bottom: 6px;
+  }
+  .job-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.08rem;
+  }
+  .job-time {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .job-clients {
+    font-size: 0.9rem;
+    color: var(--signal);
+    margin: 0 0 14px;
+  }
+  .job ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .job li {
+    position: relative;
+    padding-left: 18px;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  .job li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px;
+    height: 5px;
+    background: var(--line);
+  }
+  .subproject {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-raised);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+  }
+  .subproject-title {
+    font-weight: 500;
+    font-size: 0.96rem;
+    margin-bottom: 4px;
+  }
+  .subproject-stack {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  /* ---------- Projects ---------- */
+  .project {
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+  }
+  .project:first-child { border-top: none; padding-top: 0; }
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .project-title { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; }
+  .project-stack { font-family: var(--font-mono); font-size: 0.76rem; color: var(--signal); }
+  .project p { color: var(--text-dim); font-size: 0.95rem; max-width: 66ch; margin: 0; }
+
+  /* ---------- Achievements ---------- */
+  .achievements {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 28px;
+  }
+  @media (max-width: 620px) { .achievements { grid-template-columns: 1fr; } }
+  .achievement {
+    border-left: 2px solid var(--signal-dim);
+    padding-left: 16px;
+  }
+  .achievement-num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--signal);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .achievement p { margin: 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  /* ---------- Skills ---------- */
+  .skill-groups {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 40px;
+  }
+  @media (max-width: 620px) { .skill-groups { grid-template-columns: 1fr; } }
+  .skill-group-title {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin: 0 0 12px;
+  }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    color: var(--text);
+  }
+  .chip.learning { border-color: var(--warn); color: var(--warn); }
+
+  .languages { margin-top: 32px; font-size: 0.9rem; color: var(--text-dim); }
+  .languages span { color: var(--text); }
+
+  /* ---------- Contact ---------- */
+  .contact { text-align: left; }
+  .contact-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.8rem;
+    max-width: 16ch;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 26px;
+  }
+  footer {
+    padding: 28px 0 48px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="brand">Bharidey <span>Sarayu</span></div>
+    <nav>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero wrap">
+  <p class="hero-tag">Available for new roles</p>
+  <h1>I build the interface between messy real-world data and the people who have to act on it.</h1>
+  <p class="hero-desc">Front-end developer with 3 years building production web interfaces for healthcare and supply chain platforms — turning multi-endpoint APIs, large datasets, and business workflows into screens people can actually use quickly.</p>
+  <div class="hero-links">
+    <a class="btn btn-primary" href="mailto:bharideysarayu1208@gmail.com">Email me</a>
+    <a class="btn btn-ghost" href="https://www.linkedin.com/in/sarayu-bharidey/" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn btn-ghost" href="tel:+916370234221">+91 63702 34221</a>
+  </div>
+
+  <div class="demo">
+    <div class="demo-bar">
+      <span>cascading-selector.demo</span>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+    <div class="demo-body">
+      <p class="demo-label">A rebuild of the <strong>state → hospital → department</strong> selector I built with jQuery/Select2 at Medicover, letting staff filter records across dozens of partner-hospital locations. Try it —</p>
+      <div class="selectors">
+        <div>
+          <label for="sel-state">State</label>
+          <select id="sel-state">
+            <option value="">Select state</option>
+            <option value="maharashtra">Maharashtra</option>
+            <option value="karnataka">Karnataka</option>
+            <option value="telangana">Telangana</option>
+          </select>
+        </div>
+        <div>
+          <label for="sel-hospital">Hospital</label>
+          <select id="sel-hospital" disabled>
+            <option value="">Select state first</option>
+          </select>
+        </div>
+        <div>
+          <label for="sel-dept">Department</label>
+          <select id="sel-dept" disabled>
+            <option value="">Select hospital first</option>
+          </select>
+        </div>
+      </div>
+      <div class="result-row">
+        <span class="result-count" id="result-count">0 records matched</span>
+        <span class="result-note" id="result-note">Filters cascade — each level narrows the next.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="about wrap">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2>About</h2>
+  </div>
+  <p>I've spent the last three years as a front-end developer at <strong>Medicover, via Ashreya Technologies</strong>, building interfaces for hospital and supply chain platforms — including Bharat Hospital, Ashoka Hospital in Nashik, and Milann. Most of that work sits at the point where an API meets a real workflow: purchase orders, goods receipt notes, invoices, lab data, inventory across multiple warehouses.</p>
+  <p>What I've learned doing that is that front-end work is rarely about writing more code — it's about noticing when a form is technically correct but still frustrating, or when a table has all the right data but nobody can read it fast enough. I care about that gap, and about closing it.</p>
+  <p>I'm currently building on <strong>React.js and Node.js/Express.js</strong> through a self-directed full-stack project, and looking for a role where I can grow past implementing screens and into shaping how a product actually works.</p>
+</section>
+
+<section id="experience" class="wrap">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2>Experience</h2>
+  </div>
+
+  <div class="job">
+    <div class="job-head">
+      <span class="job-title">Front-End Developer — Medicover (via Ashreya Technologies)</span>
+      <span class="job-time">2022 — Present</span>
+    </div>
+    <p class="job-clients">Bharat Hospital · Ashoka Hospital, Nashik · Milann · partner hospital network</p>
+    <ul>
+      <li>Built and maintained front-end modules for supply chain tracking, lab management, and inventory, used across multiple partner-hospital accounts on a shared platform.</li>
+      <li>Implemented dynamic, multi-level dropdown selectors (state → hospital → department) with jQuery/Select2, letting staff filter data across dozens of hospital locations spanning several states.</li>
+      <li>Integrated multiple RESTful API endpoints to surface purchase orders, goods receipt notes, invoices, delivery challans, and sales returns in one unified interface.</li>
+      <li>Built interactive UI elements — status indicators, expandable tables, dynamic filters — to help managers review supply chain and lab data faster.</li>
+      <li>Contributed to front-end performance work (fewer unnecessary re-renders, optimized asset loading) that supported a ~20% improvement in dashboard load times.</li>
+      <li>Worked directly with backend engineers to define API contracts and troubleshoot data mismatches, keeping data flow consistent from server to UI.</li>
+    </ul>
+
+    <div class="subproject">
+      <div class="subproject-title">Inventory Management System — TechPro</div>
+      <div class="subproject-stack">HTML5 · CSS3 · Bootstrap · JavaScript · jQuery · RESTful APIs</div>
+      <ul>
+        <li>Developed and maintained the inventory UI supporting real-time stock, purchase order, and sales tracking across multiple warehouses.</li>
+        <li>Integrated live APIs for inventory updates, GRN workflows, and sales tracking, reducing reconciliation errors.</li>
+        <li>Built dynamic, paginated data tables handling large datasets with minimal latency, plus form validation that cut invalid submissions.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="wrap">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2>Personal project</h2>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <span class="project-title">School Management System</span>
+      <span class="project-stack">React.js · Node.js · Express.js</span>
+    </div>
+    <p>A full-stack app built independently to move beyond jQuery into React — a React front end talking to a self-built Node/Express REST API. Implements core CRUD workflows for students, classes, and attendance, and was my hands-on route into component structure, props/state, and connecting a front end to a backend I designed myself.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2>Impact</h2>
+  </div>
+  <div class="achievements">
+    <div class="achievement">
+      <div class="achievement-num">~20%</div>
+      <p>Reduction in page load times across enterprise dashboards through front-end performance work.</p>
+    </div>
+    <div class="achievement">
+      <div class="achievement-num">0</div>
+      <p>Critical post-launch defects on production UI features shipped for healthcare and supply chain clients.</p>
+    </div>
+    <div class="achievement">
+      <div class="achievement-num">Multi</div>
+      <p>Endpoint API integrations that helped eliminate manual reporting bottlenecks for operations teams.</p>
+    </div>
+    <div class="achievement">
+      <div class="achievement-num">Every</div>
+      <p>Sprint deadline met in an agile/Scrum environment, without trading off code quality.</p>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="wrap">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2>Skills</h2>
+  </div>
+  <div class="skill-groups">
+    <div>
+      <p class="skill-group-title">Languages & libraries</p>
+      <div class="chip-row">
+        <span class="chip">HTML5</span>
+        <span class="chip">CSS3</span>
+        <span class="chip">JavaScript (ES6+)</span>
+        <span class="chip">jQuery</span>
+        <span class="chip">Bootstrap</span>
+      </div>
+    </div>
+    <div>
+      <p class="skill-group-title">Currently learning</p>
+      <div class="chip-row">
+        <span class="chip learning">React.js</span>
+        <span class="chip learning">Node.js</span>
+        <span class="chip learning">Express.js</span>
+      </div>
+    </div>
+    <div>
+      <p class="skill-group-title">Tools</p>
+      <div class="chip-row">
+        <span class="chip">Git & GitHub</span>
+        <span class="chip">VS Code</span>
+        <span class="chip">Chrome DevTools</span>
+        <span class="chip">REST APIs</span>
+        <span class="chip">JSON</span>
+      </div>
+    </div>
+    <div>
+      <p class="skill-group-title">Core competencies</p>
+      <div class="chip-row">
+        <span class="chip">Responsive design</span>
+        <span class="chip">Cross-browser compatibility</span>
+        <span class="chip">DOM manipulation</span>
+        <span class="chip">Form validation</span>
+        <span class="chip">Debugging</span>
+      </div>
+    </div>
+  </div>
+  <p class="languages">Spoken languages: <span>Marathi (native)</span> · <span>English (professional)</span> · <span>Telugu</span> · <span>Hindi</span> · <span>Odia</span></p>
+</section>
+
+<section id="contact" class="wrap contact">
+  <div class="section-head">
+    <span class="section-num">06</span>
+    <h2>Get in touch</h2>
+  </div>
+  <p class="contact-title">Open to front-end and full-stack-leaning roles.</p>
+  <p style="color: var(--text-dim); max-width: 56ch; margin: 0;">Based in Parlakhemundi, Odisha, and open to relocating or working remotely. The fastest way to reach me is email.</p>
+  <div class="contact-links">
+    <a class="btn btn-primary" href="mailto:bharideysarayu1208@gmail.com">bharideysarayu1208@gmail.com</a>
+    <a class="btn btn-ghost" href="https://www.linkedin.com/in/sarayu-bharidey/" target="_blank" rel="noopener">linkedin.com/in/sarayu-bharidey</a>
+    <a class="btn btn-ghost" href="tel:+916370234221">+91 63702 34221</a>
+  </div>
+</section>
+
+<footer class="wrap">
+  Bharidey Sarayu — Front-End Developer
+</footer>
+
+<script>
+(function() {
+  var data = {
+    maharashtra: {
+      label: "Maharashtra",
+      hospitals: {
+        "ashoka-nashik": { label: "Ashoka Hospital, Nashik", departments: ["Lab", "Pharmacy", "Radiology", "Supply Chain"] },
+        "milann-mumbai": { label: "Milann, Mumbai", departments: ["Fertility Clinic", "Pharmacy", "Diagnostics"] }
+      }
+    },
+    karnataka: {
+      label: "Karnataka",
+      hospitals: {
+        "milann-bengaluru": { label: "Milann, Bengaluru", departments: ["Fertility Clinic", "Lab", "Inventory"] },
+        "partner-mysuru": { label: "Partner Hospital, Mysuru", departments: ["General Ward", "Pharmacy"] }
+      }
+    },
+    telangana: {
+      label: "Telangana",
+      hospitals: {
+        "bharat-hyderabad": { label: "Bharat Hospital, Hyderabad", departments: ["Supply Chain", "Lab", "Radiology", "Pharmacy"] },
+        "partner-warangal": { label: "Partner Hospital, Warangal", departments: ["General Ward", "Diagnostics"] }
+      }
+    }
+  };
+
+  var stateSel = document.getElementById('sel-state');
+  var hospitalSel = document.getElementById('sel-hospital');
+  var deptSel = document.getElementById('sel-dept');
+  var count = document.getElementById('result-count');
+  var note = document.getElementById('result-note');
+
+  function resetSelect(sel, placeholder) {
+    sel.innerHTML = '';
+    var opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = placeholder;
+    sel.appendChild(opt);
+  }
+
+  function updateCount() {
+    var hasState = !!stateSel.value;
+    var hasHospital = !!hospitalSel.value;
+    var hasDept = !!deptSel.value;
+    if (hasDept) {
+      count.textContent = (12 + Math.floor(Math.random() * 40)) + ' records matched';
+      note.textContent = 'Filtered to one department at one hospital.';
+    } else if (hasHospital) {
+      count.textContent = (80 + Math.floor(Math.random() * 120)) + ' records matched';
+      note.textContent = 'Filtered to one hospital, all departments.';
+    } else if (hasState) {
+      count.textContent = (300 + Math.floor(Math.random() * 400)) + ' records matched';
+      note.textContent = 'Filtered to one state, all hospitals.';
+    } else {
+      count.textContent = '0 records matched';
+      note.textContent = 'Filters cascade — each level narrows the next.';
+    }
+  }
+
+  stateSel.addEventListener('change', function() {
+    var stateKey = stateSel.value;
+    resetSelect(hospitalSel, 'Select hospital');
+    resetSelect(deptSel, 'Select hospital first');
+    deptSel.disabled = true;
+
+    if (stateKey && data[stateKey]) {
+      hospitalSel.disabled = false;
+      var hospitals = data[stateKey].hospitals;
+      Object.keys(hospitals).forEach(function(key) {
+        var opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = hospitals[key].label;
+        hospitalSel.appendChild(opt);
+      });
+    } else {
+      hospitalSel.disabled = true;
+      resetSelect(hospitalSel, 'Select state first');
+    }
+    updateCount();
+  });
+
+  hospitalSel.addEventListener('change', function() {
+    var stateKey = stateSel.value;
+    var hospitalKey = hospitalSel.value;
+    resetSelect(deptSel, 'Select department');
+
+    if (stateKey && hospitalKey && data[stateKey].hospitals[hospitalKey]) {
+      deptSel.disabled = false;
+      var depts = data[stateKey].hospitals[hospitalKey].departments;
+      depts.forEach(function(d) {
+        var opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        deptSel.appendChild(opt);
+      });
+    } else {
+      deptSel.disabled = true;
+      resetSelect(deptSel, 'Select hospital first');
+    }
+    updateCount();
+  });
+
+  deptSel.addEventListener('change', updateCount);
+})();
+</script>
+
+</body>
+</html>
